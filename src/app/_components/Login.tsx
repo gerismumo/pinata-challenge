@@ -1,8 +1,10 @@
-"use client"
+"use client";
 
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import Link from 'next/link';
+import Header from './Header';
 
 interface LoginFormValues {
   email: string;
@@ -30,60 +32,69 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        {({ isSubmitting }) => (
-          <Form className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium">
-                Email
-              </label>
-              <Field
-                type="email"
-                name="email"
-                id="email"
-                className="w-full p-2 mt-1 border rounded"
-              />
-              <ErrorMessage
-                name="email"
-                component="div"
-                className="text-red-500 text-sm"
-              />
-            </div>
+    <>
+    <Header/>
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="max-w-md w-full p-4 bg-white shadow-md rounded-lg">
+        <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ isSubmitting }) => (
+            <Form className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium">
+                  Email
+                </label>
+                <Field
+                  type="email"
+                  name="email"
+                  id="email"
+                  className="w-full p-2 mt-1 border rounded"
+                />
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium">
-                Password
-              </label>
-              <Field
-                type="password"
-                name="password"
-                id="password"
-                className="w-full p-2 mt-1 border rounded"
-              />
-              <ErrorMessage
-                name="password"
-                component="div"
-                className="text-red-500 text-sm"
-              />
-            </div>
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium">
+                  Password
+                </label>
+                <Field
+                  type="password"
+                  name="password"
+                  id="password"
+                  className="w-full p-2 mt-1 border rounded"
+                />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+              </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
-            >
-              {isSubmitting ? 'Logging in...' : 'Login'}
-            </button>
-          </Form>
-        )}
-      </Formik>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full bg-black text-white p-2 rounded "
+              >
+                {isSubmitting ? 'Logging in...' : 'Login'}
+              </button>
+              <div className="">
+                <p className='text-[14px]'>You don't have an account? <Link href="/auth/signup" className='text-blue-500 hover:underline'>Sign Up</Link></p>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
     </div>
+    </>
+    
   );
 };
 
