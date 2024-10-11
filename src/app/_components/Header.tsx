@@ -10,10 +10,10 @@ const Header:React.FC = () => {
             <div className="">
                 <h1 className='text-[20px] font-[600]'>SafeKeep</h1>
             </div>
-            <div className="flex flex-row items-center gap-[30px]">
+            <div className="flex flex-row items-center gap-[20px]">
                 <Link href="">About</Link>
                 <Link href="">Services</Link>
-                <Link href="" className="px-[20px] py-[8px] rounded-[8px] bg-black text-white">Get Started</Link>
+                <Link href="" className="px-[20px] py-[8px] rounded-[8px] bg-black text-white text-nowrap">Get Started</Link>
             </div>
         </div>
     </div>
