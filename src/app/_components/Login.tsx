@@ -5,6 +5,9 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Link from 'next/link';
 import Header from './Header';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 interface LoginFormValues {
   email: string;
@@ -12,10 +15,14 @@ interface LoginFormValues {
 }
 
 const Login: React.FC = () => {
+  const router = useRouter();
+
   const initialValues: LoginFormValues = {
     email: '',
     password: '',
   };
+
+
 
   const validationSchema = Yup.object({
     email: Yup.string()
@@ -26,8 +33,21 @@ const Login: React.FC = () => {
       .required('Password is required'),
   });
 
-  const handleSubmit = (values: LoginFormValues) => {
-    // Handle login logic here (e.g., API request)
+  const handleSubmit = async(values: LoginFormValues, {setSubmitting}:any) => {
+    try {
+      const response = await axios.post('/api/signin', values);
+      if(response.data.success){
+        toast.success(response.data.message)
+        router.push('/dashboard')
+      }else {
+        toast.error(response.data.message)
+      }
+    }catch(error: any) {
+      toast.error('Network Error')
+    }finally {
+      setSubmitting(false);
+    }
+  
     console.log('Login data:', values);
   };
 

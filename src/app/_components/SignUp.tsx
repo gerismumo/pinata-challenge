@@ -5,6 +5,8 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Header from './Header';
 import Link from 'next/link';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 interface SignupFormValues {
   firstName: string;
@@ -46,9 +48,19 @@ const SignUp: React.FC = () => {
     additionalInfo: Yup.string().max(500, 'Additional information can be up to 500 characters'),
   });
 
-  const handleSubmit = (values: SignupFormValues) => {
-    // Handle form submission (e.g., API call)
-    console.log('Form data:', values);
+  const handleSubmit = async(values: SignupFormValues, { setSubmitting }:any) => {
+    try{
+        const response = await axios.post('/api/signup', values);
+        if(response.data.success) {
+            toast.success(response.data.message)
+        }else {
+            toast.error(response.data.message)
+        }
+    }catch(error:any) {
+        toast.error('Network Error')
+    }finally {
+        setSubmitting(false);
+    }
   };
 
   return (
@@ -99,7 +111,6 @@ const SignUp: React.FC = () => {
                         <option value="Afghanistan">Afghanistan</option>
                         <option value="Syria">Syria</option>
                         <option value="Ukraine">Ukraine</option>
-                        {/* Add more countries as needed */}
                     </Field>
                     <ErrorMessage name="country" component="div" className="text-red-500 text-sm" />
                     </div>
