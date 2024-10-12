@@ -1,3 +1,4 @@
+import connectDB from "@/lib/dbconnect";
 import { User } from "@/lib/models";
 import { pinata } from "@/utils/config";
 import { NextRequest, NextResponse } from "next/server";
@@ -5,6 +6,8 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(req: NextRequest) {
     try{
 
+        await connectDB();
+        
         const cookie = req.cookies.get('user'); 
         if (!cookie) {
             return NextResponse.json({ success: false, message: 'User not authenticated' });

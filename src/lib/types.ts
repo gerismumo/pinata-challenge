@@ -1,5 +1,5 @@
 export interface IFile {
-    id?:string;
+    _id?:string;
     url: string;
     category: string;
     title?: string;
@@ -7,7 +7,7 @@ export interface IFile {
 }
 
 export interface IUser {
-    id?: string;
+    _id?: string;
     firstName: string;
     lastName: string;
     country: string;

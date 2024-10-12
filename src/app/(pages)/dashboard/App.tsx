@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import toast from 'react-hot-toast';
 
@@ -15,6 +15,7 @@ import ConfirmModal from '@/app/_components/ConfirmModal';
 import Pagination from '@/app/_components/Pagination';
 import AddForm from './Form';
 import DashBoardHeader from './DashBoardHeader';
+import { IFile } from '@/lib/types';
 
 
 type Props ={
@@ -26,7 +27,7 @@ type Props ={
 const Page:React.FC<Props>  = ({user}) => {
 
 
-    const [destinations, setDestinations] = useState<any[]>([]);
+    const [files, setFiles] = useState<IFile[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [openEdit, setOpenEdit] = useState<boolean>(false);
@@ -39,6 +40,24 @@ const Page:React.FC<Props>  = ({user}) => {
     const [searchQuery, setSearchQuery] = useState<string>("");
 
 
+    const fecthFiles = useCallback(async() => {
+        try {
+            const response = await axios.get('/api/files')
+            if(response.data.success) {
+                setFiles(response.data.data);
+            }else {
+                toast.error(response.data.message);
+            }
+        }catch(error: any) {
+            toast.error("Network Error")
+        }
+    }, [setFiles])
+
+    useEffect(() => {
+        fecthFiles();
+    }, [fecthFiles]);
+
+    console.log('files', files);
   
   
 
@@ -54,9 +73,9 @@ const Page:React.FC<Props>  = ({user}) => {
   
 
   const handleOpenEdit = (id: string) => {
-    setOpenEdit(!openEdit);
-    setOpenEditId(id);
-    setEditObj(destinations.find(d => d._id === id) || null);
+    // setOpenEdit(!openEdit);
+    // setOpenEditId(id);
+    // setEditObj(destinations.find(d => d._id === id) || null);
   };
 
   //submit edit
@@ -139,15 +158,15 @@ const Page:React.FC<Props>  = ({user}) => {
 
 
   //filtering search results
-  const filteredData = destinations.filter((d) => {
+  const filteredData = files.filter((d) => {
     return (
-      d.countryCode?.toString().toLowerCase().includes(searchQuery) ||
-      d.name?.toString().toLowerCase().includes(searchQuery) ||
-      d.stationID?.toString().toLowerCase().includes(searchQuery) ||
-      d.destinationNumber?.toString().toLowerCase().includes(searchQuery)
+      d.category?.toString().toLowerCase().includes(searchQuery) ||
+      d.description?.toString().toLowerCase().includes(searchQuery) ||
+      d.title?.toString().toLowerCase().includes(searchQuery) 
     )
   })
 
+//   console.log("filteredData", filteredData)
   //pagination use hook
   const {
     pageData,
@@ -185,13 +204,6 @@ const Page:React.FC<Props>  = ({user}) => {
             >
               {openAddForm ? <FontAwesomeIcon icon={faXmark}/> : (<><FontAwesomeIcon icon={faPlus}/> New</>)}
             </button>
-            <button
-            type='button'
-            onClick={handleBuildClick}
-                className="w-[100%] xs:w-auto bg-lightDark hover:bg-dark text-white px-[20px]  py-[6px] rounded"
-            >
-              {loadingBuild? <Spinner/>: "Publish"}
-            </button>
           </div>
         </div>
         {openAddForm && <AddForm  close={setOpenAddForm}/> }
@@ -200,10 +212,9 @@ const Page:React.FC<Props>  = ({user}) => {
               <thead>
                   <tr>
                       <th className='table-cell'>Image</th>
-                      <th className='table-cell'>Station ID</th>
-                      <th className='table-cell'>Code</th>
-                      <th className='table-cell'>Name</th>
-                      <th className='table-cell'>Destination Number</th>
+                      <th className='table-cell'>Category</th>
+                      <th className='table-cell'>Heading</th>
+                      <th className='table-cell'>Description</th>
                       <th className='table-cell'>Actions</th>
                   </tr>
               </thead>
@@ -216,36 +227,35 @@ const Page:React.FC<Props>  = ({user}) => {
                         </div>
                       </td>
                     </tr>
-                  ): pageData.map((d, index) => (
+                  ): pageData.map((d :IFile, index) => (
                     <React.Fragment key={d._id}>
                       <tr>
                           <td className="table-cell">
-                            {d.image && (
+                            {d.url && (
                               <div className="w-[50px] h-[50px]">
                                 <ImageLoader
-                                  src={d.image as string}
+                                  src={d.url as string}
                                   alt=""
                                   fill={true}
                                 />
                               </div>
                             )}
                           </td>
-                          <td className='table-cell'>{d.stationID? d.stationID: "-"}</td>
-                          <td className='table-cell'>{d.countryCode ? d.countryCode: "-"}</td>
-                          <td  className='table-cell'>{d.name ? d.name: "-"}</td>
-                          <td className='table-cell'>{d.destinationNumber? d.destinationNumber: "-"}</td>
+                          <td className='table-cell'>{d.category}</td>
+                          <td className='table-cell'>{d.title ? d.title: "-"}</td>
+                          <td  className='table-cell'>{d.description}</td>
                           <td  className='table-cell'>
                             <div className="flex flex-row items-center justify-center gap-[30px]">
                               <button
                               type='button'
-                              onClick={() => handleOpenEdit(d._id)}
+                              onClick={() => handleOpenEdit(d._id as string)}
                               className="bg-lightDark hover:bg-grey text-nowrap text-white px-3 py-1 rounded-[10px]"
                               >
                               {openEditId === d._id && openEdit ? "Close" :  (<><FontAwesomeIcon icon={faPenToSquare} /> Edit</>)} 
                               </button>
                               <button
                               type='button'
-                              onClick={() => handleDelete(d._id)}
+                              onClick={() => handleDelete(d._id as string)}
                               className="text-red-600 text-2xl"
                               >
                                 <FontAwesomeIcon icon={faTrashCan} />
@@ -253,68 +263,6 @@ const Page:React.FC<Props>  = ({user}) => {
                             </div>
                           </td>
                       </tr>
-                      {openEdit && openEditId === d._id && (
-                        <tr>
-                            <td className='table-cell p-[10px]' colSpan={6}>
-                              <form 
-                              onSubmit={(e) => handleSubmitEdit(e)}
-                              className="flex flex-col gap-[10px] bg-white shadow-md rounded p-[10px] sm:p-[30px]"
-                              >
-                                <div className="flex flex-col">
-                                  <label htmlFor="name">Name</label>
-                                  <input type="text" 
-                                  value={editObj?.name}
-                                  onChange={(e) => setEditObj(editObj ? {...editObj, name: e.target.value}: null)}
-                                  className='input'
-                                  />
-                                </div>
-                                <div className="flex flex-col">
-                                  <label htmlFor="name">Country Code</label>
-                                  <input type="text" value={editObj?.countryCode}
-                                  onChange={(e) => setEditObj(editObj ? {...editObj, countryCode: e.target.value}: null)}
-                                  className='input'
-                                  />
-                                </div>
-                                <div className="flex flex-col">
-                                  <label htmlFor="name">Station ID</label>
-                                  <input type="text" value={editObj?.stationID}
-                                  onChange={(e) => setEditObj(editObj ? {...editObj, stationID: e.target.value}: null)}
-                                  className='input'
-                                  />
-                                </div>
-                                <div className="flex flex-col">
-                                  <label htmlFor="name">Destination Number</label>
-                                  <input type="text" value={editObj?.destinationNumber}
-                                  onChange={(e) => setEditObj(editObj ? {...editObj, destinationNumber: e.target.value}: null)}
-                                  className='input'
-                                  />
-                                </div>
-                                <div className="flex flex-col">
-                                <label
-                                  className="block text-gray-700 text-sm font-bold"
-                                  htmlFor="imageUrl"
-                                >
-                                  Image 
-                                </label>
-                                <input type="file" 
-                                  name="image"
-                                  id="image"
-                                  accept="image/*"
-                                  onChange={(e: any) => setEditObj(editObj ? {...editObj, image: e.target.files[0] as File}: null)}
-                                  className="input"
-                                />
-                              </div>
-                                <button 
-                                type='submit'
-                                disabled={isLoading}
-                                className='w-[100%] p-[30px] py-[6px] rounded-[6px] text-white bg-lightDark hover:bg-darkBlue font-[600]'
-                                >
-                                  {isLoading ? <Spinner/> : 'Edit'}
-                                </button>
-                              </form>
-                            </td>
-                        </tr>
-                      )}
                     </React.Fragment>
                   ))}
               </tbody>
@@ -327,7 +275,7 @@ const Page:React.FC<Props>  = ({user}) => {
           onConfirm={handleConfirmDelete}
           message="Are you sure you want to delete this content?"
         />
-        {destinations.length > itemsPerPage && pageData.length > 0 && (
+        {files.length > itemsPerPage && pageData.length > 0 && (
           <Pagination
             currentPage={currentPage}
             pageCount={pageCount}

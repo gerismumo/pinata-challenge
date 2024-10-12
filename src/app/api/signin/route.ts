@@ -1,3 +1,4 @@
+import connectDB from "@/lib/dbconnect";
 import { User } from "@/lib/models";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,6 +10,8 @@ export async function POST(req: NextRequest) {
         if (!email || !password) {
           return NextResponse.json({ success: false, message: 'Email and password are required' });
         }
+
+        await connectDB()
 
         const user = await User.findOne({ email });
 
@@ -50,6 +53,7 @@ export async function POST(req: NextRequest) {
       
           return response;
     }catch(error: any) {
-        NextResponse.json({success: false, message:'Internal Server Error'})
+        console.log(error)
+        return NextResponse.json({success: false, message:'Internal Server Error'})
     }
 }
