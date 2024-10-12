@@ -1,7 +1,8 @@
 import mongoose, {mongo, Schema} from 'mongoose';
-import { IImage, IUser } from './types';
+import { IFile, IUser } from './types';
 
-const imageShema : Schema<IImage> = new mongoose.Schema({
+
+const fileShema : Schema<IFile> = new mongoose.Schema({
     url: { type: String, required: true },
     title: { type: String },
     description: { type: String }
@@ -15,7 +16,7 @@ const userSchema : Schema<IUser> = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     additinalInfo: { type: String },
-    images: [{ type: [imageShema], default: []}]
+    file: [{ type: [fileShema], default: []}]
 });
 
 export const User = mongoose.models.User || mongoose.model<IUser>('User', userSchema);

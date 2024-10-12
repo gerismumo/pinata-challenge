@@ -17,11 +17,14 @@ import AddForm from './Form';
 import DashBoardHeader from './DashBoardHeader';
 
 
+type Props ={
+    user: any
+}
 
 
 
+const Page:React.FC<Props>  = ({user}) => {
 
-const Page:React.FC  = () => {
 
     const [destinations, setDestinations] = useState<any[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -164,7 +167,7 @@ const Page:React.FC  = () => {
 
   return (
     <>
-    <DashBoardHeader/>
+    <DashBoardHeader user={user}/>
     <div className="container flex flex-col gap-[30px] py-[30px]">
        <div className="flex flex-col sm:flex-row justify-between xs:items-end gap-[10px]">
         <input

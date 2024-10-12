@@ -1,4 +1,4 @@
-export interface IImage {
+export interface IFile {
     id?:string;
     url: string;
     title?: string;
@@ -14,7 +14,7 @@ export interface IUser {
     email: string;
     password:string;
     additinalInfo?: string;
-    images?: IImage[]
+    file?: IFile[]
 
 
 }

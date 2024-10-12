@@ -21,13 +21,34 @@ export async function POST(req: NextRequest) {
         if (!isMatch) {
           return NextResponse.json({ success: false, message: 'Invalid email or password' });
         }
-  
-        return NextResponse.json({
-          success: true,
-          message: 'Login successful',
-          user: { id: user._id, email: user.email, name: user.name },
-        });
 
+
+        const expires = new Date();
+        expires.setDate(expires.getDate() + 30);
+
+        const userData = {
+        id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName
+        };
+  
+        const response = NextResponse.json({
+            success: true,
+            message: 'Login successful',
+            user: userData,
+          });
+      
+          
+        response.cookies.set('user', JSON.stringify(userData), {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        path: '/',
+        expires,
+        });
+      
+          return response;
     }catch(error: any) {
         NextResponse.json({success: false, message:'Internal Server Error'})
     }
