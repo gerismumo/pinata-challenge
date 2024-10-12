@@ -1,6 +1,7 @@
 export interface IFile {
     id?:string;
     url: string;
+    category: string;
     title?: string;
     description?: string;
 }

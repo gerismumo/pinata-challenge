@@ -15,6 +15,7 @@ const AddForm: React.FC<Props> = ({ close }) => {
     file: null as File | null,
     heading: "",
     description: "",
+    category: "public", 
   };
 
   const validationSchema = Yup.object({
@@ -33,6 +34,7 @@ const AddForm: React.FC<Props> = ({ close }) => {
       }),
     heading: Yup.string().required("Heading is required"),
     description: Yup.string(),
+    category: Yup.string().oneOf(["public", "private"], "Invalid category").required("Category is required"),
   });
 
   const handleSubmit = async (values: any, { setSubmitting }: any) => {
@@ -40,23 +42,23 @@ const AddForm: React.FC<Props> = ({ close }) => {
     formData.append("file", values.file);
     formData.append("heading", values.heading);
     formData.append("description", values.description);
-
+    formData.append("category", values.category); 
 
     console.log("Form data submitted:", values);
 
-   try{
-    const response = await axios.post('/api/upload', formData)
-    if(response.data.success) {
+    try {
+      const response = await axios.post("/api/upload", formData);
+      if (response.data.success) {
         toast.success(response.data.message);
-        close(false); 
-    }else {
+        close(false);
+      } else {
         toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Network Error");
+    } finally {
+      setSubmitting(false);
     }
-   }catch(error) {
-     toast.error("Network Error");
-   }finally {
-    setSubmitting(false);
-   }
   };
 
   return (
@@ -83,7 +85,7 @@ const AddForm: React.FC<Props> = ({ close }) => {
                   setFieldValue("file", file);
                 }}
                 className={`mt-1 block w-full border border-gray-300 rounded-md ${
-                  isSubmitting && !initialValues.file ? 'border-red-500' : ''
+                  isSubmitting && !initialValues.file ? "border-red-500" : ""
                 }`}
               />
               <ErrorMessage name="file" component="div" className="text-red-500 text-sm" />
@@ -101,6 +103,21 @@ const AddForm: React.FC<Props> = ({ close }) => {
               <ErrorMessage name="heading" component="div" className="text-red-500 text-sm" />
             </div>
             <div>
+              <label htmlFor="category" className="block text-sm font-medium">
+                Category
+              </label>
+              <Field
+                as="select"
+                name="category"
+                id="category"
+                className="w-full p-2 mt-1 border rounded"
+              >
+                <option value="public">Public</option>
+                <option value="private">Private</option>
+              </Field>
+              <ErrorMessage name="category" component="div" className="text-red-500 text-sm" />
+            </div>
+            <div>
               <label htmlFor="description" className="block text-sm font-medium">
                 Description
               </label>
@@ -112,6 +129,7 @@ const AddForm: React.FC<Props> = ({ close }) => {
                 rows={4}
               />
             </div>
+            
             <button
               type="submit"
               disabled={isSubmitting}

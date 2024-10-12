@@ -4,6 +4,7 @@ import { IFile, IUser } from './types';
 
 const fileShema : Schema<IFile> = new mongoose.Schema({
     url: { type: String, required: true },
+    category: { type: String, required: true },
     title: { type: String },
     description: { type: String }
 })

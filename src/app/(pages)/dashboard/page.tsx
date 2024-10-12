@@ -2,7 +2,6 @@ import Dashboard from "./App";
 import { cookies } from 'next/headers';
 
 export default function Home() {
-    // Retrieve the cookies
     const cookieStore = cookies();
     const userCookie = cookieStore.get('user')?.value;
 
@@ -11,8 +10,6 @@ export default function Home() {
     if (userCookie) {
         user = JSON.parse(userCookie);
     }
-
-    console.log("usercoo", user);
     return (
         <div>
             <Dashboard user={user} />
