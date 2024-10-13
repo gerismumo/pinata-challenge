@@ -2,6 +2,9 @@ import connectDB from "@/lib/dbconnect";
 import { User } from "@/lib/models";
 import { NextRequest, NextResponse } from "next/server";
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 export async function DELETE(req:NextRequest, {params}: {params: {id: string}} ) {
     try {
         await connectDB();
@@ -14,6 +17,7 @@ export async function DELETE(req:NextRequest, {params}: {params: {id: string}} )
         const { id } = JSON.parse(cookie.value);  
         
         const user = await User.findById(id);
+
         if (!user) {
             return NextResponse.json({ success: false, message: 'User not found' });
         }

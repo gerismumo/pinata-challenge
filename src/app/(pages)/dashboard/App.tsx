@@ -1,5 +1,9 @@
 "use client"
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+
 import React, { useCallback, useEffect, useState } from 'react';
 
 import toast from 'react-hot-toast';

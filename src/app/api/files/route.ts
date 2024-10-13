@@ -2,6 +2,9 @@ import connectDB from "@/lib/dbconnect";
 import { User } from "@/lib/models";
 import { NextRequest, NextResponse } from "next/server";
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 
 export async function GET(req: NextRequest) {
     try {

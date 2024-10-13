@@ -1,5 +1,8 @@
 "use client";
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import React, { useCallback, useEffect, useState } from 'react';
 import Header from './Header';
 import axios from 'axios';

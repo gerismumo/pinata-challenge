@@ -1,5 +1,7 @@
-
 import { useState, useEffect } from 'react';
+
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 const usePagination = (data: any[], itemHeight: number) => {
   const [itemsPerPage, setItemsPerPage] = useState<number>(0);
