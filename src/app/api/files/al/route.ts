@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
             const country = user.country;
 
     
-            const publicFiles = user.file.filter((f: any) => f.category === "private");
+            const publicFiles = user.file.filter((f: any) => f.category !== "private");
 
             publicFiles.forEach((file: any) => {
                 const updatedFile = {
@@ -40,6 +40,7 @@ export async function GET(req: NextRequest) {
 
             return Files;
         });
+
 
         return NextResponse.json({ success: true, data: Files });
 
