@@ -7,6 +7,7 @@ import Header from './Header';
 import Link from 'next/link';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 interface SignupFormValues {
   firstName: string;
@@ -20,6 +21,8 @@ interface SignupFormValues {
 }
 
 const SignUp: React.FC = () => {
+    const router = useRouter();
+
   const initialValues: SignupFormValues = {
     firstName: '',
     lastName: '',
@@ -52,7 +55,9 @@ const SignUp: React.FC = () => {
     try{
         const response = await axios.post('/api/signup', values);
         if(response.data.success) {
+            router.push('/auth/signin')
             toast.success(response.data.message)
+
         }else {
             toast.error(response.data.message)
         }
@@ -106,12 +111,12 @@ const SignUp: React.FC = () => {
                     <label htmlFor="country" className="block text-sm font-medium">
                         Country
                     </label>
-                    <Field as="select" name="country" id="country" className="w-full p-2 mt-1 border rounded">
-                        <option value="">Select your country</option>
-                        <option value="Afghanistan">Afghanistan</option>
-                        <option value="Syria">Syria</option>
-                        <option value="Ukraine">Ukraine</option>
-                    </Field>
+                    <Field
+                        type="text"
+                        name="country"
+                        id="country"
+                        className="w-full p-2 mt-1 border rounded"
+                    />
                     <ErrorMessage name="country" component="div" className="text-red-500 text-sm" />
                     </div>
 
