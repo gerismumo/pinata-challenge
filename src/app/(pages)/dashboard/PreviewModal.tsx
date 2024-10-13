@@ -1,10 +1,8 @@
 "use client"
-import ImageLoader from "@/app/_components/ImageLoader";
+import FileLoader from "@/app/_components/FileLoader";
 import { IFile } from "@/lib/types";
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import toast from "react-hot-toast";
 
 
 interface PreviewModalProps {
@@ -41,12 +39,11 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ show, content, onClose }) =
             {content.url && (
               <div className="flex flex-col w-[100%] h-[400px] relative">
                 <h2 className="font-[600] text-sBlue">Image</h2>
-                <ImageLoader
+                <FileLoader
                   src={content.url as string}
                   alt=""
                   fill={true}
                 />
-                {/* <img src={content.url} alt="" /> */}
               </div>
             )}
           </div>

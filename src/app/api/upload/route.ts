@@ -26,10 +26,12 @@ export async function POST(req: NextRequest) {
         
         const uploadData = await pinata.upload.file(file as File)
         
-        const url = await pinata.gateways.createSignedURL({
-            cid: uploadData.cid,
-            expires: 3600,
-        });
+        const url = `https://gateway.pinata.cloud/ipfs/${uploadData.IpfsHash}`;
+        
+        // const url = await pinata.gateways.createSignedURL({
+        //     cid: uploadData.cid,
+        //     expires: 3600,
+        // });
 
         const user = await User.findById(id);
         if (!user) {

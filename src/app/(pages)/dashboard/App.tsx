@@ -10,13 +10,14 @@ import usePagination from '@/utils/usePagination';
 import Loader from '@/app/_components/Loader';
 import { faPenToSquare, faPlus, faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Spinner from '@/app/_components/Spinner';
-import ImageLoader from '@/app/_components/ImageLoader';
 import ConfirmModal from '@/app/_components/ConfirmModal';
 import Pagination from '@/app/_components/Pagination';
 import AddForm from './Form';
 import DashBoardHeader from './DashBoardHeader';
 import { IFile } from '@/lib/types';
 import PreviewModal from './PreviewModal';
+import { TruncateContent } from '@/utils/services';
+import FileLoader from '@/app/_components/FileLoader';
 
 
 type Props ={
@@ -185,24 +186,19 @@ const Page:React.FC<Props>  = ({user}) => {
                     <React.Fragment key={d._id}>
                       <tr>
                           <td className="table-cell">
-                            {/* {d.url && (
+                            {d.url && (
                               <div className="w-[50px] h-[50px]">
-                                <ImageLoader
+                                <FileLoader
                                   src={d.url as string}
                                   alt=""
                                   fill={true}
                                 />
                               </div>
-                            )} */}
-                            {d.url && (
-                              <div className="w-[50px] h-[50px]">
-                                <img src={d.url} alt="" style={{ width: '100%', height: '100%' }} />
-                              </div>
                             )}
                           </td>
                           <td className='table-cell'>{d.category}</td>
-                          <td className='table-cell'>{d.title ? d.title: "-"}</td>
-                          <td  className='table-cell'>{d.description}</td>
+                          <td className='table-cell'>{d.title ? TruncateContent(d.title, 30): "-"}</td>
+                          <td  className='table-cell'>{d.description ? TruncateContent(d.description, 30): "-"}</td>
                           <td  className='table-cell'>
                             <div className="flex flex-row items-center justify-center gap-[30px]">
                             <button
@@ -256,3 +252,5 @@ const Page:React.FC<Props>  = ({user}) => {
 }
 
 export default Page;
+
+
