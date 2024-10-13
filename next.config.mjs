@@ -4,6 +4,12 @@ const nextConfig = {
       remotePatterns: [
         {
           protocol: 'https',
+          hostname: 'maroon-accused-peacock-746.mypinata.cloud',
+          port: '',
+          pathname: '/**',
+        },
+        {
+          protocol: 'https',
           hostname: '**',  
         },
         {

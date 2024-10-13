@@ -7,7 +7,6 @@ export async function POST(req: NextRequest) {
     try{
 
         await connectDB();
-        
         const cookie = req.cookies.get('user'); 
         if (!cookie) {
             return NextResponse.json({ success: false, message: 'User not authenticated' });

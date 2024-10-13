@@ -16,6 +16,7 @@ import Pagination from '@/app/_components/Pagination';
 import AddForm from './Form';
 import DashBoardHeader from './DashBoardHeader';
 import { IFile } from '@/lib/types';
+import PreviewModal from './PreviewModal';
 
 
 type Props ={
@@ -38,6 +39,8 @@ const Page:React.FC<Props>  = ({user}) => {
     const [deleteId, setDeleteId] = useState<string | null>(null);
     const [openAddForm, setOpenAddForm] = useState<boolean>(false);
     const [searchQuery, setSearchQuery] = useState<string>("");
+    const [showPreviewModal, setShowPreviewModal] = useState<boolean>(false); 
+    const [previewContent, setPreviewContent] = useState<IFile | null>(null); 
 
 
     const fecthFiles = useCallback(async() => {
@@ -59,8 +62,6 @@ const Page:React.FC<Props>  = ({user}) => {
 
     console.log('files', files);
   
-  
-
 
     useEffect(() => {
       if (error) {
@@ -68,59 +69,21 @@ const Page:React.FC<Props>  = ({user}) => {
       }
     }, [error]);
 
-  //handle open edit
-
-  
-
-  const handleOpenEdit = (id: string) => {
-    // setOpenEdit(!openEdit);
-    // setOpenEditId(id);
-    // setEditObj(destinations.find(d => d._id === id) || null);
-  };
-
-  //submit edit
-  const handleSubmitEdit = async(e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if(editObj === null) {
-      toast.error("no available data");
-      return;
-    }
-
- 
-
-   
-    // try {
-    //   const response = await axios.put(`/api/destination/${editObj._id}`, formData);
-    //   if(response.data.success) {
-    //     setOpenEdit(false);
-    //     fetchData();
-    //     toast.success(response.data.message);
-    //     setIsLoading(false);
-    //   } else {
-    //     toast.error(response.data.message);
-    //     setIsLoading(false);
-    //   }
-    // } catch (error: any) {
-    //   toast.error("Network error");
-    // }finally{
-    //   setIsLoading(false);
-    // }
-  }
 
 
    //delete data 
    const deleteData = async (id: string) => {
-    // try {
-    //   const response = await axios.delete(`/api/destination/${id}`);
-    //   if (response.data.success) {
-    //     toast.success(response.data.message);
-      
-    //   } else {
-    //     toast.error(response.data.message);
-    //   }
-    // } catch (error) {
-    //   toast.error('network error');
-    // }
+    try {
+      const response = await axios.delete(`/api/files/${id}`);
+      if (response.data.success) {
+        toast.success(response.data.message);
+        await fecthFiles();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error('network error');
+    }
   };
 
   const handleDelete = (id: string) => {
@@ -140,21 +103,13 @@ const Page:React.FC<Props>  = ({user}) => {
     setDeleteId(null);
   };
 
-  //build function
-  const [loadingBuild, setLoadingBuild] = useState<Boolean>(false);
+  const handlePreview = (content: IFile) => {
+    setPreviewContent(content);
+    setShowPreviewModal(true);
+  };
+  
 
-  const handleBuildClick = async() => {
-    // setLoadingBuild(true);
-    // try {
-    //   const message = await handleBuild();
-
-    //   toast.success(message);
-    // }catch (error: any) {
-    //   toast.error(error.message)
-    // }finally {
-    //   setLoadingBuild(false);
-    // }
-  } 
+  
 
 
   //filtering search results
@@ -166,7 +121,6 @@ const Page:React.FC<Props>  = ({user}) => {
     )
   })
 
-//   console.log("filteredData", filteredData)
   //pagination use hook
   const {
     pageData,
@@ -231,13 +185,18 @@ const Page:React.FC<Props>  = ({user}) => {
                     <React.Fragment key={d._id}>
                       <tr>
                           <td className="table-cell">
-                            {d.url && (
+                            {/* {d.url && (
                               <div className="w-[50px] h-[50px]">
                                 <ImageLoader
                                   src={d.url as string}
                                   alt=""
                                   fill={true}
                                 />
+                              </div>
+                            )} */}
+                            {d.url && (
+                              <div className="w-[50px] h-[50px]">
+                                <img src={d.url} alt="" style={{ width: '100%', height: '100%' }} />
                               </div>
                             )}
                           </td>
@@ -246,13 +205,12 @@ const Page:React.FC<Props>  = ({user}) => {
                           <td  className='table-cell'>{d.description}</td>
                           <td  className='table-cell'>
                             <div className="flex flex-row items-center justify-center gap-[30px]">
-                              <button
-                              type='button'
-                              onClick={() => handleOpenEdit(d._id as string)}
-                              className="bg-lightDark hover:bg-grey text-nowrap text-white px-3 py-1 rounded-[10px]"
-                              >
-                              {openEditId === d._id && openEdit ? "Close" :  (<><FontAwesomeIcon icon={faPenToSquare} /> Edit</>)} 
-                              </button>
+                            <button
+                              onClick={() => handlePreview(d)} 
+                              className="btn-sec"
+                            >
+                              Preview
+                            </button>
                               <button
                               type='button'
                               onClick={() => handleDelete(d._id as string)}
@@ -267,8 +225,15 @@ const Page:React.FC<Props>  = ({user}) => {
                   ))}
               </tbody>
           </table>
-          
         </div>
+        {showPreviewModal && previewContent && (
+          <PreviewModal
+            show={showPreviewModal} 
+            content={previewContent} 
+            onClose={() => setShowPreviewModal(false)} 
+          />
+        )}
+
         <ConfirmModal
           show={showDeleteModal}
           onClose={handleCancelDelete}
