@@ -7,9 +7,8 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import usePagination from '@/utils/usePagination';
-import Loader from '@/app/_components/Loader';
-import { faDownload, faPenToSquare, faPlus, faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
-import Spinner from '@/app/_components/Spinner';
+import { faDownload,  faPlus, faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
+
 import ConfirmModal from '@/app/_components/ConfirmModal';
 import Pagination from '@/app/_components/Pagination';
 import AddForm from './Form';
@@ -20,11 +19,9 @@ import { TruncateContent } from '@/utils/services';
 import FileLoader from '@/app/_components/FileLoader';
 
 
-type Props ={
+type Props = {
     user: any
 }
-
-
 
 const Page:React.FC<Props>  = ({user}) => {
 
@@ -46,6 +43,7 @@ const Page:React.FC<Props>  = ({user}) => {
                 toast.error(response.data.message);
             }
         }catch(error: any) {
+            console.log(error)
             toast.error("Network Error")
         }
     }, [setFiles])
@@ -186,7 +184,7 @@ const handleDownload = async (url: string, filename: string) => {
                         </div>
                       </td>
                     </tr>
-                  ): pageData.map((d :IFile, index) => (
+                  ): pageData.map((d :IFile) => (
                     <React.Fragment key={d._id}>
                       <tr>
                           <td className="table-cell">

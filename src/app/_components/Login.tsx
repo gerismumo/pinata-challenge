@@ -105,7 +105,7 @@ const Login: React.FC = () => {
                 {isSubmitting ? 'Logging in...' : 'Login'}
               </button>
               <div className="">
-                <p className='text-[14px]'>You don't have an account? <Link href="/auth/signup" className='text-blue-500 hover:underline'>Sign Up</Link></p>
+                <p className='text-[14px]'>{`You don't have an account?`}<Link href="/auth/signup" className='text-blue-500 hover:underline'>Sign Up</Link></p>
               </div>
             </Form>
           )}

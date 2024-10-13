@@ -62,6 +62,7 @@ const SignUp: React.FC = () => {
             toast.error(response.data.message)
         }
     }catch(error:any) {
+        console.log(error)
         toast.error('Network Error')
     }finally {
         setSubmitting(false);

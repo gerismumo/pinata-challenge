@@ -9,7 +9,7 @@ interface Props {
   fill?: boolean;
 }
 
-const FileLoader: React.FC<Props> = ({ src, alt = '', fill = false }) => {
+const FileLoader: React.FC<Props> = ({ src, alt = '' }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [fileType, setFileType] = useState<string | null>(null);

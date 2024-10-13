@@ -22,7 +22,8 @@ const DashBoardHeader:React.FC<Props> = ({user}) => {
             } else {
                 toast.error('Failed to logout');
             }
-        } catch (error) {
+        } catch (error:any) {
+            console.log(error)
             toast.error('Error logging out');
         }
     };

@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import React from 'react'
 
-type Props = {}
+
 
 const Header:React.FC = () => {
     const router = useRouter()

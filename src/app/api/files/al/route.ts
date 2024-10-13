@@ -6,7 +6,7 @@ export async function GET(req: NextRequest) {
     try {
         await connectDB();
         const users = await User.find();
-        console.log(users);
+       
 
         const Files: any[] = []; 
 
