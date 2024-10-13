@@ -48,7 +48,6 @@ const Login: React.FC = () => {
       setSubmitting(false);
     }
   
-    console.log('Login data:', values);
   };
 
   return (

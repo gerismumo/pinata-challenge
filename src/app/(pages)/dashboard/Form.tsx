@@ -62,16 +62,15 @@ const AddForm: React.FC<Props> = ({ close }) => {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-semibold mb-4">Upload File</h2>
+    <div className="w-full p-4">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
         {({ isSubmitting, setFieldValue }) => (
-          <Form className="space-y-4">
-            <div>
+          <Form className="flex flex-col gap-[10px] bg-white shadow-md rounded px-[30px] py-[10px]">
+            <div >
               <label htmlFor="file" className="block text-sm font-medium">
                 File Upload
               </label>
@@ -91,18 +90,6 @@ const AddForm: React.FC<Props> = ({ close }) => {
               <ErrorMessage name="file" component="div" className="text-red-500 text-sm" />
             </div>
             <div>
-              <label htmlFor="heading" className="block text-sm font-medium">
-                Heading
-              </label>
-              <Field
-                type="text"
-                name="heading"
-                id="heading"
-                className="w-full p-2 mt-1 border rounded"
-              />
-              <ErrorMessage name="heading" component="div" className="text-red-500 text-sm" />
-            </div>
-            <div>
               <label htmlFor="category" className="block text-sm font-medium">
                 Category
               </label>
@@ -116,6 +103,18 @@ const AddForm: React.FC<Props> = ({ close }) => {
                 <option value="private">Private</option>
               </Field>
               <ErrorMessage name="category" component="div" className="text-red-500 text-sm" />
+            </div>
+            <div>
+              <label htmlFor="heading" className="block text-sm font-medium">
+                Heading
+              </label>
+              <Field
+                type="text"
+                name="heading"
+                id="heading"
+                className="w-full p-2 mt-1 border rounded"
+              />
+              <ErrorMessage name="heading" component="div" className="text-red-500 text-sm" />
             </div>
             <div>
               <label htmlFor="description" className="block text-sm font-medium">
@@ -140,13 +139,6 @@ const AddForm: React.FC<Props> = ({ close }) => {
           </Form>
         )}
       </Formik>
-      <button
-        type="button"
-        onClick={() => close(false)}
-        className="mt-4 text-gray-600 underline"
-      >
-        Cancel
-      </button>
     </div>
   );
 };

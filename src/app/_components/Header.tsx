@@ -18,6 +18,7 @@ const Header:React.FC = () => {
                 <Link href="/">Home</Link>
                 <Link href="">About</Link>
                 <Link href="">Services</Link>
+                <Link href="/reports">Reports</Link>
                 <Link href="/auth/signin" className="px-[20px] py-[8px] rounded-[8px] bg-black text-white text-nowrap">Get Started</Link>
             </div>
         </div>
