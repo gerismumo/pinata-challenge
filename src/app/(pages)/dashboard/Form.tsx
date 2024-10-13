@@ -78,7 +78,7 @@ const AddForm: React.FC<Props> = ({ close }) => {
                 id="file"
                 name="file"
                 type="file"
-                accept="image/jpeg,image/png,video/mp4,audio/mpeg"
+                accept="image/jpeg,image/png"
                 onChange={(event) => {
                   const file = event.currentTarget.files ? event.currentTarget.files[0] : null;
                   setFieldValue("file", file);

@@ -27,8 +27,9 @@ body {
 }
 
 .container {
-  @apply px-[10px] md:px-[20px] lg:px-[40px] xl:px-[80px] 2xl:max-w-[1380px];
+  @apply px-[20px] md:px-[40px] lg:px-[60px] xl:px-[80px]  ;
 }
+
 
 .input {
   @apply border-[1px] border-grey py-[6px] px-[4px] rounded-[3px] outline-none focus:outline-none focus:border-none focus:ring-1 focus:ring-lightRed ;

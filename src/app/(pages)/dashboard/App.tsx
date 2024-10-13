@@ -8,7 +8,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import usePagination from '@/utils/usePagination';
 import Loader from '@/app/_components/Loader';
-import { faPenToSquare, faPlus, faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faPenToSquare, faPlus, faTrashCan, faXmark } from '@fortawesome/free-solid-svg-icons';
 import Spinner from '@/app/_components/Spinner';
 import ConfirmModal from '@/app/_components/ConfirmModal';
 import Pagination from '@/app/_components/Pagination';
@@ -28,14 +28,7 @@ type Props ={
 
 const Page:React.FC<Props>  = ({user}) => {
 
-
     const [files, setFiles] = useState<IFile[]>([]);
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [openEdit, setOpenEdit] = useState<boolean>(false);
-    const [openEditId, setOpenEditId] = useState<string | null>(null);
-    const [editObj, setEditObj] = useState<any | null>(null);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     const [deleteId, setDeleteId] = useState<string | null>(null);
     const [openAddForm, setOpenAddForm] = useState<boolean>(false);
@@ -60,16 +53,6 @@ const Page:React.FC<Props>  = ({user}) => {
     useEffect(() => {
         fecthFiles();
     }, [fecthFiles]);
-
-    console.log('files', files);
-  
-
-    useEffect(() => {
-      if (error) {
-          toast.error(error);
-      }
-    }, [error]);
-
 
 
    //delete data 
@@ -139,6 +122,27 @@ const Page:React.FC<Props>  = ({user}) => {
 //     );
 //   }
 
+
+const handleDownload = async (url: string, filename: string) => {
+  try {
+    const response = await fetch(url, {
+      mode: 'cors', 
+    });
+    const blob = await response.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(blobUrl); 
+  } catch (error) {
+    console.error('Download failed:', error);
+  }
+};
+
+
   return (
     <>
     <DashBoardHeader user={user}/>
@@ -157,7 +161,7 @@ const Page:React.FC<Props>  = ({user}) => {
             type='button'
             className='px-[20px] py-[6px] rounded-[4px] bg-lightDark hover:bg-dark text-white'
             >
-              {openAddForm ? <FontAwesomeIcon icon={faXmark}/> : (<><FontAwesomeIcon icon={faPlus}/> New</>)}
+              {openAddForm ? <FontAwesomeIcon icon={faXmark}/> : (<><FontAwesomeIcon icon={faPlus}/> New File</>)}
             </button>
           </div>
         </div>
@@ -201,12 +205,21 @@ const Page:React.FC<Props>  = ({user}) => {
                           <td  className='table-cell'>{d.description ? TruncateContent(d.description, 30): "-"}</td>
                           <td  className='table-cell'>
                             <div className="flex flex-row items-center justify-center gap-[30px]">
-                            <button
-                              onClick={() => handlePreview(d)} 
-                              className="btn-sec"
-                            >
-                              Preview
-                            </button>
+                              <button
+                                onClick={() => handlePreview(d)} 
+                                className="btn-sec"
+                              >
+                                Preview
+                              </button>
+                              <button
+                                onClick={() => handleDownload(d.url as string, `${d.title}.jpg`)}
+                                className="btn-sec"
+                              >
+                                <div className="flex flex-row items-center gap-[2px]">
+                                  <FontAwesomeIcon icon={faDownload} />
+                                  Download
+                                </div>
+                              </button>
                               <button
                               type='button'
                               onClick={() => handleDelete(d._id as string)}
