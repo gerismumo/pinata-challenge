@@ -7,8 +7,21 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
     try {
+
+        const { searchParams } = new URL(req.url);
+        const countryFilter = searchParams.get("country"); 
+        const categoryFilter = searchParams.get("category");
+        const query: any = {};
+
+        if(countryFilter && categoryFilter) {
+            query.country = countryFilter;
+            query.category = categoryFilter;
+        }
+        
+    
         await connectDB();
-        const users = await User.find();
+        const users = await User.find(query);
+
        
 
         const Files: any[] = []; 

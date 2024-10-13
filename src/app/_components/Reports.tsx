@@ -28,10 +28,17 @@ const Reports: React.FC = () => {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [modalContent, setModalContent] = useState<Report | null>(null);
 
+  const [countryFilter, setCountryFilter] = useState<string>('');
+  const [categoryFilter, setCategoryFilter] = useState<string>('');
+
+
+
   const fetchData = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/files/al');
+      const response = await axios.get('/api/files/al', {
+        params: { country: countryFilter, category: categoryFilter },
+      });
       if (response.data.success) {
         setReports(response.data.data);
       } else {
@@ -42,7 +49,7 @@ const Reports: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [countryFilter, categoryFilter])
 
   useEffect(() => {
     fetchData();
