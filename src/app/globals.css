@@ -27,7 +27,7 @@ body {
 }
 
 .container {
-  @apply px-[20px] md:px-[40px] lg:px-[60px] xl:px-[80px]  ;
+  @apply px-[20px] md:px-[40px] lg:px-[60px] xl:px-[80px]  mx-auto;
 }
 
 
